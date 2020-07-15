@@ -1,0 +1,26 @@
+{
+  "name": "personal_website_backend",
+  "version": "1.0.0",
+  "description": "Backend for my personal website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiboabd/personal_website_backend.git"
+  },
+  "author": "Hibo Abdilaahi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hiboabd/personal_website_backend/issues"
+  },
+  "homepage": "https://github.com/hiboabd/personal_website_backend#readme",
+  "dependencies": {
+    "@sendgrid/mail": "^7.2.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
