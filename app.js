@@ -21,5 +21,10 @@ app.get('/api', (req, res, next) => {
   res.send('API Staus: Running')
 })
 
+app.post('/api/email', (req, res, next) => {
+  sendGrid.setApiKey('');
+})
+
+
 //listen on port 3030 on local host
 app.listen(3030, '0.0.0.0');
