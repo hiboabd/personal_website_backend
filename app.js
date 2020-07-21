@@ -1,8 +1,9 @@
-const express = require('express')
-const bodyParser = require('body-parser')
+const express = require('express');
+const bodyParser = require('body-parser');
 // cross origin resource sharing
-const cors = require('cors')
-const sendGrid = require('@sendGrid/mail')
+const cors = require('cors');
+
+const nodemailer = require("nodemailer");
 
 const app = express();
 
@@ -17,14 +18,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/api', (req, res, next) => {
+app.get('/', (req, res, next) => {
   res.send('API Staus: Running')
 })
-
-app.post('/api/email', (req, res, next) => {
-  sendGrid.setApiKey('');
-})
-
 
 //listen on port 3030 on local host
 app.listen(3030, '0.0.0.0');
