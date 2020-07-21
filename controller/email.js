@@ -21,7 +21,6 @@ transporter.verify((error, success) => {
 
 var EmailController = {
   Send: function(req, res){
-    console.log(req)
     const name = req.body.name
     const email = req.body.email
     const message = req.body.message
@@ -30,13 +29,11 @@ var EmailController = {
       from: email,
       to: process.env.PERSONAL_EMAIL,
       subject: 'Contact form request',
-
       html: message
     }
 
     transporter.sendMail(mail, (err, data) => {
       if(err){
-        console.log(err)
         res.json({
           msg: 'fail'
         })
