@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const dotenv = require('dotenv').config()
 
+// passing the credentials in the config file (.env) to the SMTP transport
 var transport = {
   host: 'smtp.gmail.com',
   auth: {
@@ -11,6 +12,7 @@ var transport = {
 
 var transporter = nodemailer.createTransport(transport)
 
+// confirming the SMTP connection is correct using the verify method
 transporter.verify((error, success) => {
   if (error) {
     console.log(error);
@@ -19,7 +21,9 @@ transporter.verify((error, success) => {
   }
 });
 
+// Controller
 var EmailController = {
+  // starts by creating the email object (object is called mail)
   Send: function(req, res){
     const name = req.body.name
     const email = req.body.email
@@ -32,6 +36,7 @@ var EmailController = {
       html: message
     }
 
+  // sendMail delivers the message object using the transporter made above
     transporter.sendMail(mail, (err, data) => {
       if(err){
         res.json({
@@ -43,7 +48,6 @@ var EmailController = {
         })
       }
     })
-
   }
 };
 
