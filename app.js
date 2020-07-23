@@ -45,22 +45,19 @@ oauth2Client.setCredentials({
   // defining the post route inside the .then function as the transporter object
   // is not accessible outside of the .then function
   app.post('/new', (req, res, next) => {
-    console.log(req)
-    console.log(process.env.PERSONAL_EMAIL)
     const name = req.body.name
     const email = req.body.email
     const message = req.body.message
 
     var mail = {
       from: email,
-      to: process.env.PERSONAL_EMAIL,
+      to: process.env.EMAIL,
       subject: 'Contact form request',
       html: message
     }
 
   // sendMail delivers the message object using the transporter made above
     transporter.sendMail(mail, (err, data) => {
-      console.log(mail)
       if(err){
         res.json({
           msg: 'fail',
