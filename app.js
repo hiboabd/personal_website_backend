@@ -3,75 +3,20 @@ const bodyParser = require('body-parser');
 // cross origin resource sharing
 const cors = require('cors');
 const nodemailer = require("nodemailer");
-const dotenv = require('dotenv').config()
-const { google } = require("googleapis");
-const OAuth2 = google.auth.OAuth2;
+const dotenv = require('dotenv').config();
+const nodemailMailgun = require('nodemailer-mailgun-transport');
 
-const oauth2Client = new OAuth2(
-     process.env.CLIENT_ID, // ClientID
-     process.env.CLIENT_SECRET, // Client Secret
-     "https://developers.google.com/oauthplayground" // Redirect URL
-);
+// Step 1
 
-//using the refresh token to request a new accesstoken
-oauth2Client.setCredentials({
-     refresh_token: process.env.REFRESH_TOKEN
-});
+const auth = {
+  auth: {
+    api_key: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN
+  }
+};
 
-//passing the credentials in the config file (.env) to the SMTP transporter
-  oauth2Client.getAccessToken().then(result => {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: process.env.EMAIL,
-        refresh_token: process.env.REFRESH_TOKEN,
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
-        accessToken: result.token,
-      }
-    })
-
-  // confirming the SMTP connection is correct using the verify method
-  transporter.verify((error, success) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Server is ready to take messages');
-    }
-  })
-
-
-  // defining the post route inside the .then function as the transporter object
-  // is not accessible outside of the .then function
-  app.post('/new', (req, res, next) => {
-    const name = req.body.name
-    const email = req.body.email
-    const message = req.body.message
-
-    const mail = {
-      from: '<hiboe@hotmail.co.uk>', // gmail does not let you change from sender so I will have to change approach
-      to: 'hiboabdilaahi@gmail.com',
-      subject: 'Contact form request',
-      html: `${req.body.name} (${req.body.email}) says: ${req.body.message}`
-    }
-
-  // sendMail delivers the message object using the transporter made above
-    transporter.sendMail(mail, (err, data) => {
-      console.log(mail)
-      if(err){
-        res.json({
-          msg: 'fail'
-        })
-      } else {
-        res.json({
-          msg: 'success'
-        })
-      }
-      transporter.close();
-    })
-  })
-})
+// Step 2 - Transporter
+let transporter = nodemailer.createTransport(nodemailMailgun(auth));
 
 const app = express();
 
@@ -88,6 +33,35 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res, next) => {
   res.send('API Status: Running')
+})
+
+// Step 3 - define post route
+app.post('/new', (req, res, next) => {
+  const name = req.body.name
+  const email = req.body.email
+  const message = req.body.message
+
+  const mail = {
+    from: email,
+    to: 'hiboabdilaahi@gmail.com',
+    subject: 'Contact form request',
+    html: `${req.body.name} (${req.body.email}) says: ${req.body.message}`
+  }
+
+// sendMail delivers the message object using the transporter made above
+  transporter.sendMail(mail, (err, data) => {
+    if(err){
+      console.log(err)
+      res.json({
+        msg: 'fail'
+      })
+    } else {
+      res.json({
+        msg: 'success'
+      })
+    }
+    transporter.close();
+  })
 })
 
 //listen on port 3030 on local host
