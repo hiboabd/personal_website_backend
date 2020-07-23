@@ -49,20 +49,19 @@ oauth2Client.setCredentials({
     const email = req.body.email
     const message = req.body.message
 
-    var mail = {
-      from: email,
-      to: process.env.EMAIL,
+    const mail = {
+      from: '<hiboe@hotmail.co.uk>', // gmail does not let you change from sender so I will have to change approach
+      to: 'hiboabdilaahi@gmail.com',
       subject: 'Contact form request',
-      html: message
+      html: `${req.body.name} (${req.body.email}) says: ${req.body.message}`
     }
 
   // sendMail delivers the message object using the transporter made above
     transporter.sendMail(mail, (err, data) => {
+      console.log(mail)
       if(err){
         res.json({
-          msg: 'fail',
-          err: err,
-          mail: mail
+          msg: 'fail'
         })
       } else {
         res.json({
