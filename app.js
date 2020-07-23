@@ -59,6 +59,7 @@ oauth2Client.setCredentials({
   // sendMail delivers the message object using the transporter made above
     transporter.sendMail(mail, (err, data) => {
       if(err){
+        console.log(err)
         res.json({
           msg: 'fail'
         })
