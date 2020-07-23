@@ -42,7 +42,7 @@ oauth2Client.setCredentials({
   })
 
 
-  // defining the post route inside the .then function as the transporter object 
+  // defining the post route inside the .then function as the transporter object
   // is not accessible outside of the .then function
   app.post('/new', (req, res, next) => {
     const name = req.body.name
@@ -90,4 +90,4 @@ app.get('/', (req, res, next) => {
 })
 
 //listen on port 3030 on local host
-app.listen(3030, '0.0.0.0');
+app.listen(process.env.PORT || 5000, '0.0.0.0');
