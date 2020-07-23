@@ -7,8 +7,6 @@ const dotenv = require('dotenv').config()
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
-// var EmailController = require('./controller/email');
-
 const oauth2Client = new OAuth2(
      process.env.CLIENT_ID, // ClientID
      process.env.CLIENT_SECRET, // Client Secret
@@ -43,6 +41,9 @@ oauth2Client.setCredentials({
     }
   })
 
+
+  // defining the post route inside the .then function as the transporter object 
+  // is not accessible outside of the .then function
   app.post('/new', (req, res, next) => {
     const name = req.body.name
     const email = req.body.email
